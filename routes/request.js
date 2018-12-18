@@ -3,31 +3,29 @@ const router = express.Router();
 const Request = require('../models/request');
 const mailSend = require('./answer-request-mail-sending');
 
-router.get('/mailSend', function (req, res, next) {
-    console.log(req.body);
+router.post('/send-mail', function (req, res, next) {
     const mailOptions = {
         from: "toanhanduc@gmail.com",
         to: req.body.to,
-        subject: req.body.subject,
+        subject: "[Cổng thông tin xác thực bảng điểm] - Kết quả xác thực!",
         generateTextFromHTML: true,
         html: req.body.html
     };
-    console.log(mailOptions)
-    // mailSend.smtpTransport.sendMail(mailOptions, (error, response) => {
-    //     if (error) {
-    //         console.log(error);
-    //         mailSend.smtpTransport.close();
-    //         res.status(500).json({
-    //             status: 'failed'
-    //         })
-    //     } else {
-    //         console.log(response);
-    //         mailSend.smtpTransport.close();
-    //         res.status(200).json({
-    //             status: 'success'
-    //         })
-    //     }
-    // });
+    mailSend.smtpTransport.sendMail(mailOptions, (error, response) => {
+        if (error) {
+            console.log(error);
+            mailSend.smtpTransport.close();
+            res.status(500).json({
+                status: 'send mail failed'
+            })
+        } else {
+            console.log(response);
+            mailSend.smtpTransport.close();
+            res.status(200).json({
+                status: 'success'
+            })
+        }
+    });
 });
 
 // get all requests
