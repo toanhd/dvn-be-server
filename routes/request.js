@@ -5,7 +5,7 @@ const mailSend = require('./answer-request-mail-sending');
 
 router.post('/send-mail', function (req, res, next) {
     const mailOptions = {
-        from: "toanhanduc@gmail.com",
+        from: "DVN - Ministry of Education Portal",
         to: req.body.to,
         subject: "[Cổng thông tin xác thực bảng điểm] - Kết quả xác thực!",
         generateTextFromHTML: true,
