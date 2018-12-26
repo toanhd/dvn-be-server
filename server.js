@@ -4,11 +4,8 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const appRoutes = require('./routes/default');
 const authentRoutes = require('./routes/authentication');
 const requestRoutes = require('./routes/request');
-
-
 
 require('console-stamp')(console, '[HH:MM:ss.l]');
 
@@ -25,7 +22,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', appRoutes);
 app.use('/authentication', authentRoutes);
 app.use('/request', requestRoutes);
 

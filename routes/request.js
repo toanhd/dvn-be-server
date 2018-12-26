@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Request = require('../models/request');
-const mailSend = require('./answer-request-mail-sending');
+const mailSend = require('./mail-transport');
 
-router.post('/send-mail', function (req, res, next) {
+router.post('/sendmail', function (req, res, next) {
     const mailOptions = {
         from: "DVN - Ministry of Education Portal",
         to: req.body.to,
@@ -29,7 +29,7 @@ router.post('/send-mail', function (req, res, next) {
 });
 
 // get all requests
-router.get('/', function (req, res, next) {
+router.get('/getreqs', function (req, res, next) {
     console.log('success get all requests');
     Request.find({}, function (err, result) {
         res.status(200).json({
@@ -40,7 +40,7 @@ router.get('/', function (req, res, next) {
 });
 
 // create request
-router.post('/', function (req, res, next) {
+router.post('/creatreq', function (req, res, next) {
     const request = new Request(req.body);
     request.save(function (err, result) {
         if (err) {
@@ -59,7 +59,7 @@ router.post('/', function (req, res, next) {
 });
 
 // Change status
-router.patch('/', async function (req, res, next) {
+router.patch('/reqstatus', async function (req, res, next) {
     try {
         const request = await Request.findById(req.body.request_id);
         if (!request) {
