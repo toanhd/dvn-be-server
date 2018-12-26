@@ -27,7 +27,12 @@ router.post('/login', function (req, res, next) {
             }
             switch (req.body.port) {
                 case 'admin':
-                    if (user.roleID == 'admin') {
+                    if (user.disabled) {
+                        return res.status(403).json({
+                            login: false,
+                            message: 'Locked'
+                        })
+                    } else if (user.roleID == 'admin') {
                         const token = jwt.sign({user: user}, 'dvn_admin', {expiresIn: 7200});
                         if (sha256(req.body.password) === user.password) {
                             return res.status(200).json({
@@ -47,7 +52,12 @@ router.post('/login', function (req, res, next) {
                     }
                     break;
                 case 'moe':
-                    if (user.isMoE && user.roleID !== 'admin') {
+                    if (user.disabled) {
+                        return res.status(403).json({
+                            login: false,
+                            message: 'Locked'
+                        })
+                    } else if (user.isMoE && user.roleID !== 'admin') {
                         const token = jwt.sign({user: user}, 'dvn_moe', {expiresIn: 7200});
                         if (sha256(req.body.password) === user.password) {
                             return res.status(200).json({
@@ -66,7 +76,12 @@ router.post('/login', function (req, res, next) {
                     }
                     break;
                 case 'hust':
-                    if (!user.isMoE && user.roleID !== 'admin') {
+                    if (user.disabled) {
+                        return res.status(403).json({
+                            login: false,
+                            message: 'Locked'
+                        })
+                    } else if (!user.isMoE && user.roleID !== 'admin') {
                         const token = jwt.sign({user: user}, 'dv_hust', {expiresIn: 7200});
                         if (sha256(req.body.password) === user.password) {
                             return res.status(200).json({
